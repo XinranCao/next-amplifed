@@ -54,6 +54,27 @@ async function handleCreatePost(event) {
   }
 }
 
+const createUserAndAssignGroup = async () => {
+  try {
+    // Create a new user
+    await Auth.signUp({
+      username: "user@example.com",
+      password: "temporaryPassword",
+      attributes: {
+        email: "user@example.com",
+        // ... other attributes
+      },
+    });
+
+    // Add user to group
+    await Auth.adminAddUserToGroup("user@example.com", "Seller");
+
+    console.log("User created and added to group successfully");
+  } catch (error) {
+    console.log("Error:", error);
+  }
+};
+
 export default function Home({ posts = [] }) {
   return (
     <div className={styles.container}>
@@ -102,6 +123,12 @@ export default function Home({ posts = [] }) {
                 <button>Create Post</button>
                 <button type="button" onClick={() => Auth.signOut()}>
                   Sign out
+                </button>
+                <button
+                  type="button"
+                  onClick={() => createUserAndAssignGroup()}
+                >
+                  Test Sign Up and add user to User Group
                 </button>
               </form>
             </Authenticator>
